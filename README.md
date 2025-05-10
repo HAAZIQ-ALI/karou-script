@@ -6,7 +6,7 @@ I'm a **14-year-old programmer** working on a new language idea called **Karou S
 > **Karou Script** blends the **beauty of HTML/CSS (especially Tailwind)** with the **power and performance of native C++-like languages** — all aimed at building **modern desktop apps**, without the baggage of JavaScript.
 
 I'm looking for **mentors, collaborators, and contributors** interested in **language design, compiler development**, or just passionate about desktop UI innovation.  
-🔗 I've created a basic concept document here: [link]  
+ 
 I’m eager to learn, grow, and build something that changes the way we write apps.
 
 ---
