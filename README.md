@@ -34,7 +34,7 @@ That’s where **Karou Script** comes in.
 
 ```ks
 onClick("loveBtn") {
-    print("Kaoruko noticed you!");
+    print("HelloWorld!");
 }
 ```
 
@@ -72,7 +72,7 @@ That’s it. You build your interface in HTML, style it with CSS (or Tailwind), 
 #include <karou>
 
 function main() {
-    print("Hello, Kaoruko!");
+    print("HelloWorld!");
 }
 ```
 
@@ -80,7 +80,7 @@ function main() {
 
 ```ks
 onClick("loveBtn") {
-    print("Kaoruko noticed you!");
+    print("HI!");
 }
 ```
 
@@ -89,7 +89,7 @@ onClick("loveBtn") {
 ```html
 <div class="text-center mt-10">
     <button id="loveBtn" class="bg-pink-500 text-white p-4 rounded-xl">
-        Confess
+        hi
     </button>
 </div>
 ```
