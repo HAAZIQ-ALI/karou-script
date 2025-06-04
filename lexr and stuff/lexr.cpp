@@ -8,22 +8,22 @@
 enum class TokenType {
     NUMBER,      // Numeric literals like 42, 3.14
     IDENTIFIER,  // Variable names, function names
-    EQUALS,      // = sign
-    PLUS,        // + sign
-    MINUS,       // - sign
-    STAR,        // * sign (multiplication)
-    SLASH,       // / sign (division)
-    OPEN_PAREN,  // Opening parenthesis (
-    CLOSE_PAREN, // Closing parenthesis )
-    LET,         // 'let' keyword
-    ILLEGAL,     // Characters we don't recognize
+    STRING,       // STRING TO LEX like "hello", "world"
+    PRINT,  
+    EQUALS,      
+    PLUS,        
+    MINUS,       
+    STAR,        
+    SLASH,       
+    OPEN_PAREN,  
+    CLOSE_PAREN, 
+    LET,
+    SEMICOLON,         
+    ILLEGAL,     
     END_OF_FILE  // Indicates we've reached the end of input
 };
 
-/**
- * Token struct represents a single token extracted from the input.
- * It contains both the type of token and the literal string from input.
- */
+
 struct Token {
     TokenType type;
     std::string literal;
@@ -91,6 +91,30 @@ private:
         return input.substr(startPos, position - startPos);
     }
 
+    /**
+     * readString consumes a sequence of characters within double quotes.
+     * This handles string literals in the source code.
+     */
+    std::string readString() {
+        // Skip the opening quote
+        readChar();
+        
+        size_t startPos = position;
+        while (ch != '"' && ch != 0) {  // Read until closing quote or EOF
+            readChar();
+        }
+        
+        // Extract string without the quotes
+        std::string str = input.substr(startPos, position - startPos);
+        
+        // Skip the closing quote
+        if (ch == '"') {
+            readChar();
+        }
+        
+        return str;
+    }
+
 public:
     /**
      * Lexer constructor initializes the lexer with input text.
@@ -112,46 +136,51 @@ public:
         
         // Recognize single-character tokens directly
         switch (ch) {
-            case '=':
-                tok = Token(TokenType::EQUALS, "=");
-                break;
-            case '+':
-                tok = Token(TokenType::PLUS, "+");
-                break;
-            case '-':
-                tok = Token(TokenType::MINUS, "-");
-                break;
-            case '*':
-                tok = Token(TokenType::STAR, "*");
-                break;
-            case '/':
-                tok = Token(TokenType::SLASH, "/");
-                break;
-            case '(':
-                tok = Token(TokenType::OPEN_PAREN, "(");
-                break;
-            case ')':
-                tok = Token(TokenType::CLOSE_PAREN, ")");
-                break;
-            case 0:  // End of file reached
-                tok = Token(TokenType::END_OF_FILE, "");
-                break;
-            default:
-                // Handle multi-character tokens
-                if (isdigit(ch)) {
-                    // For numbers, use a helper method
-                    std::string num = readNumber();
-                    return Token(TokenType::NUMBER, num);
-                } else if (isalpha(ch) || ch == '_') {
-                    // For identifiers, use a helper method
-                    std::string ident = readIdentifier();
-                    // Check if this identifier is actually a keyword
-                    if (ident == "let") {
-                        return Token(TokenType::LET, ident);
-                    }
-                    return Token(TokenType::IDENTIFIER, ident);
-                }
-                // If we don't recognize the character, it remains an ILLEGAL token
+    case '=':
+        tok = Token(TokenType::EQUALS, "=");
+        break;
+    case '+':
+        tok = Token(TokenType::PLUS, "+");
+        break;
+    case '-':
+        tok = Token(TokenType::MINUS, "-");
+        break;
+    case '*':
+        tok = Token(TokenType::STAR, "*");
+        break;
+    case '/':
+        tok = Token(TokenType::SLASH, "/");
+        break;
+    case '(':
+        tok = Token(TokenType::OPEN_PAREN, "(");
+        break;
+    case ')':
+        tok = Token(TokenType::CLOSE_PAREN, ")");
+        break;
+    case ';':
+        tok = Token(TokenType::SEMICOLON, ";");
+        break;
+    case '"':
+        return Token(TokenType::STRING, readString());
+    case 0:  // End of file reached
+        tok = Token(TokenType::END_OF_FILE, "");
+        break;
+    default:
+        if (isdigit(ch)) {
+            std::string num = readNumber();
+            return Token(TokenType::NUMBER, num);
+        } else if (isalpha(ch) || ch == '_') {
+            std::string ident = readIdentifier();
+            if (ident == "let") {
+                return Token(TokenType::LET, ident);
+            } else if (ident == "print") {
+                return Token(TokenType::PRINT, ident);
+            } else {
+                return Token(TokenType::IDENTIFIER, ident);
+            }
+        } else {
+            return Token(TokenType::ILLEGAL, std::string(1, ch));
+        }
         }
         
         // For single-character tokens, advance to the next character
@@ -168,6 +197,7 @@ std::string tokenTypeToString(TokenType type) {
     switch (type) {
         case TokenType::NUMBER: return "NUMBER";
         case TokenType::IDENTIFIER: return "IDENTIFIER";
+        case TokenType::PRINT: return "PRINT";
         case TokenType::EQUALS: return "EQUALS";
         case TokenType::PLUS: return "PLUS";
         case TokenType::MINUS: return "MINUS";
@@ -178,19 +208,16 @@ std::string tokenTypeToString(TokenType type) {
         case TokenType::LET: return "LET";
         case TokenType::ILLEGAL: return "ILLEGAL";
         case TokenType::END_OF_FILE: return "EOF";
+        case TokenType::STRING: return "STRING";
+        case TokenType::SEMICOLON: return "SEMICOLON";
         default: return "UNKNOWN";
     }
 }
 
-/**
- * main function demonstrates the lexer in action.
- * It tokenizes a sample input and prints each token.
- */
 int main() {
     // Sample input to tokenize
-    std::string input = "let yourWeight = 10 Ton";
-    
-    // Create a lexer with our input
+    std::string input = "print(\"hi\");";
+
     Lexer lexer(input);
     
     // Get the first token
@@ -207,3 +234,4 @@ int main() {
     }
     return 0;
 }
+
