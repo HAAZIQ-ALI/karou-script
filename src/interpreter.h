@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <variant>
 #include <functional>
+#include <stdexcept>
 
 // Value types that our interpreter can handle
 using Value = std::variant<double, std::string, bool>;

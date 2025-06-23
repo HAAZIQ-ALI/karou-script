@@ -1,7 +1,7 @@
 #include "parser.h"
 #include <iostream>
 
-Parser::Parser(const std::string& input) : lexer(input) {
+Parser::Parser(const std::string& input) : lexer(input), currentToken(TokenType::ILLEGAL, "", 1, 1), peekToken(TokenType::ILLEGAL, "", 1, 1) {
     nextToken();
     nextToken();
 }
