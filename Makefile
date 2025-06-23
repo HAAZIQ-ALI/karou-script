@@ -63,3 +63,4 @@ help:
 	@echo "  help     - Show this help"
 
 .PHONY: all clean install uninstall test debug help
+)
