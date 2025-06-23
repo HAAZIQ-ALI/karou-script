@@ -16,9 +16,7 @@ g++ -std=c++17 -Wall -Wextra -O2 -c src/compiler.cpp -o obj/compiler.o
 
 # Link executable
 echo "Linking executable..."
-g++ obj/*.o -o bin/karou
-
-if [ $? -eq 0 ]; then
+if g++ obj/*.o -o bin/karou; then
     echo "✅ Build successful! Executable created at bin/karou"
     echo ""
     echo "Usage examples:"
